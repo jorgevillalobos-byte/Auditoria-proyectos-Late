@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Project Health</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite Project Health Dashboard</title>
 
 <style>
 body{font-family:Arial,sans-serif;background:#f4f6f9;margin:0;padding:20px;color:#1f2937}
@@ -15,6 +16,7 @@ textarea{min-height:70px}
 .card{background:#fff;padding:18px;border-radius:12px;border:1px solid #e5e7eb}
 .card p{font-size:32px;font-weight:bold;margin:8px 0}
 button{margin-top:15px;padding:12px 18px;border:0;border-radius:8px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
+button:hover{opacity:.92}
 .danger{background:#dc2626}
 .admin-btn{background:#64748b}
 .success{background:#16a34a}
@@ -41,13 +43,29 @@ th{background:#f8fafc}
 .audit-metric{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:10px;padding:10px}
 .audit-metric strong{display:block;font-size:12px;color:#64748b}
 .audit-metric span{font-size:22px;font-weight:bold;color:#0f172a}
+.header{display:flex;align-items:center;gap:25px;margin-bottom:25px;padding-bottom:20px;border-bottom:2px solid #e5e7eb}
+.logo{height:120px;width:auto;max-width:360px;object-fit:contain}
+.header-text h1{margin:0;font-size:42px;color:#0f172a}
+.header-text p{margin-top:8px;color:#64748b;font-size:16px}
+.table-wrapper{overflow-x:auto}
+@media(max-width:700px){
+  .header{flex-direction:column;text-align:center}
+  .logo{height:auto;width:100%;max-width:280px}
+  .header-text h1{font-size:30px}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<h1>Project Health</h1>
+<div class="header">
+  <img src="logo-elite.png" alt="Elite" class="logo">
+  <div class="header-text">
+    <h1>Elite Project Health Dashboard</h1>
+    <p>Business Intelligence · Auditoría de Proyectos</p>
+  </div>
+</div>
 
 <h2>Datos de Auditoría</h2>
 
@@ -148,6 +166,7 @@ th{background:#f8fafc}
 
 <h2>Listado de Proyectos</h2>
 
+<div class="table-wrapper">
 <table>
 <thead>
 <tr>
@@ -163,6 +182,7 @@ th{background:#f8fafc}
 </thead>
 <tbody id="tbody"></tbody>
 </table>
+</div>
 
 <h2>Bloqueos Identificados</h2>
 <textarea id="bloqueos"></textarea>
@@ -517,6 +537,7 @@ function renderHistorial(){
 
           <h3>Proyectos auditados</h3>
 
+          <div class="table-wrapper">
           <table>
             <thead>
               <tr>
@@ -536,6 +557,7 @@ function renderHistorial(){
               }
             </tbody>
           </table>
+          </div>
         </div>
       </details>
     `;
