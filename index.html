@@ -1,35 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sistema de Cotizaciones Ecommerce</title>
   <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #2563eb;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --border: #cbd5e1;
+      --muted: #64748b;
+      --success: #16a34a;
+      --error: #dc2626;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6f9;
+      background: var(--bg);
       margin: 0;
-      padding: 25px;
+      padding: 24px;
       color: #1f2937;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1120px;
       margin: auto;
-      background: white;
-      padding: 25px;
+      background: var(--card);
+      padding: 26px;
       border-radius: 16px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.12);
     }
 
     h1, h2 {
+      color: var(--primary);
       text-align: center;
-      color: #0f172a;
+      margin-top: 0;
+    }
+
+    h1 { margin-bottom: 6px; }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 24px;
     }
 
     .tabs {
       display: flex;
       gap: 10px;
-      margin-bottom: 25px;
+      margin-bottom: 24px;
     }
 
     .tabs button {
@@ -40,56 +63,64 @@
       font-weight: bold;
       cursor: pointer;
       background: #e5e7eb;
+      color: #111827;
+      font-size: 15px;
     }
 
     .tabs button.active {
-      background: #0f172a;
+      background: var(--primary);
       color: white;
     }
 
-    .section {
-      display: none;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
-    .section.active {
-      display: block;
+    .note {
+      background: #f8fafc;
+      border-left: 5px solid var(--secondary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #334155;
+      line-height: 1.5;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 15px;
     }
 
     label {
       font-weight: bold;
       display: block;
-      margin-bottom: 5px;
-      margin-top: 10px;
+      margin-bottom: 6px;
+      margin-top: 8px;
+      color: #334155;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
+      padding: 11px;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      box-sizing: border-box;
+      font-size: 14px;
+      background: white;
     }
 
     textarea {
-      min-height: 110px;
+      min-height: 120px;
+      resize: vertical;
     }
 
-    .full {
-      grid-column: 1 / -1;
-    }
+    .full { grid-column: 1 / -1; }
 
     .btn {
       margin-top: 20px;
       width: 100%;
-      background: #2563eb;
+      background: var(--secondary);
       color: white;
-      padding: 14px;
+      padding: 15px;
       border: none;
       border-radius: 10px;
       font-size: 16px;
@@ -97,257 +128,289 @@
       cursor: pointer;
     }
 
-    .btn:hover {
-      background: #1d4ed8;
+    .btn:hover { background: #1d4ed8; }
+
+    .btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
     }
 
-    .note {
-      background: #f8fafc;
-      border-left: 5px solid #2563eb;
-      padding: 15px;
+    .success, .error, .info {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 15px;
+      padding: 12px;
       border-radius: 8px;
-      margin-bottom: 20px;
     }
 
-    .success {
-      color: #16a34a;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 15px;
-    }
+    .success { color: var(--success); background: #ecfdf5; }
+    .error { color: var(--error); background: #fef2f2; }
+    .info { color: #1d4ed8; background: #eff6ff; }
 
-    .error {
-      color: #dc2626;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 15px;
+    @media (max-width: 700px) {
+      body { padding: 12px; }
+      .container { padding: 18px; }
+      .tabs { flex-direction: column; }
     }
   </style>
 </head>
-
 <body>
+  <div class="container">
+    <h1>Sistema de Cotizaciones Ecommerce</h1>
+    <div class="subtitle">Un solo sitio para solicitar cotizaciones y responder solicitudes</div>
 
-<div class="container">
-  <h1>Sistema de Cotizaciones Ecommerce</h1>
+    <div class="tabs">
+      <button class="active" onclick="mostrarSeccion('solicitud', this)">Solicitar Cotización</button>
+      <button onclick="mostrarSeccion('respuesta', this)">Responder Solicitud</button>
+    </div>
 
-  <div class="tabs">
-    <button class="active" onclick="mostrarSeccion('solicitud', this)">Solicitar Cotización</button>
-    <button onclick="mostrarSeccion('respuesta', this)">Responder Solicitud</button>
+    <section id="solicitud" class="section active">
+      <h2>Solicitar Cotización</h2>
+      <div class="note">
+        Este formulario envía la solicitud a Hamyrich como destinatario principal, con copia a Mildred, Erlys y Jorge.
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="solicitante">Solicitante interno</label>
+          <input id="solicitante" placeholder="Ej. Jorge Villalobos" />
+        </div>
+
+        <div>
+          <label for="cliente">Cliente</label>
+          <input id="cliente" placeholder="Nombre del cliente" />
+        </div>
+
+        <div>
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" placeholder="Teléfono / WhatsApp" />
+        </div>
+
+        <div>
+          <label for="correoCliente">Correo del cliente</label>
+          <input id="correoCliente" type="email" placeholder="cliente@email.com" />
+        </div>
+
+        <div>
+          <label for="tipoEcommerce">Tipo de ecommerce</label>
+          <select id="tipoEcommerce">
+            <option>Básico - Tienda pequeña</option>
+            <option>Intermedio - Tienda profesional</option>
+            <option>Avanzado - Ecommerce personalizado</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="productos">Cantidad de productos</label>
+          <select id="productos">
+            <option>1 a 20 productos</option>
+            <option>21 a 50 productos</option>
+            <option>51 a 100 productos</option>
+            <option>Más de 100 productos</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="diseno">Diseño</label>
+          <select id="diseno">
+            <option>Plantilla base</option>
+            <option>Diseño semi personalizado</option>
+            <option>Diseño 100% personalizado</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="integraciones">Integraciones</label>
+          <select id="integraciones">
+            <option>Sin integraciones</option>
+            <option>WhatsApp / Redes Sociales</option>
+            <option>CRM / Email Marketing</option>
+            <option>Inventario / ERP / API</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="urgencia">Urgencia</label>
+          <select id="urgencia">
+            <option>Normal</option>
+            <option>Urgente</option>
+            <option>Prioridad alta</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="comentarios">Comentarios del proyecto</label>
+          <textarea id="comentarios" placeholder="Describe el proyecto, funcionalidades, referencias, necesidades del cliente, etc."></textarea>
+        </div>
+      </div>
+
+      <button id="btnSolicitud" class="btn" onclick="enviarSolicitud()">Enviar Solicitud</button>
+      <div id="mensajeSolicitud"></div>
+    </section>
+
+    <section id="respuesta" class="section">
+      <h2>Responder Solicitud</h2>
+      <div class="note">
+        Esta respuesta se envía al cliente con copia a Mildred, Erlys y Jorge. Si el cliente responde, la respuesta irá dirigida a Hamyrich.
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="respCliente">Cliente</label>
+          <input id="respCliente" placeholder="Nombre del cliente" />
+        </div>
+
+        <div>
+          <label for="respCorreoCliente">Correo del cliente</label>
+          <input id="respCorreoCliente" type="email" placeholder="cliente@email.com" />
+        </div>
+
+        <div>
+          <label for="precioFinal">Precio final USD</label>
+          <input id="precioFinal" type="number" placeholder="Ej. 2500" />
+        </div>
+
+        <div>
+          <label for="tiempoEstimado">Tiempo estimado</label>
+          <input id="tiempoEstimado" placeholder="Ej. 20 días hábiles" />
+        </div>
+
+        <div class="full">
+          <label for="respuestaTexto">Respuesta / propuesta</label>
+          <textarea id="respuestaTexto" placeholder="Escribe aquí la respuesta que recibirá el cliente"></textarea>
+        </div>
+
+        <div class="full">
+          <label for="observaciones">Observaciones adicionales</label>
+          <textarea id="observaciones" placeholder="Notas adicionales"></textarea>
+        </div>
+      </div>
+
+      <button id="btnRespuesta" class="btn" onclick="enviarRespuesta()">Enviar Respuesta al Cliente</button>
+      <div id="mensajeRespuesta"></div>
+    </section>
   </div>
 
-  <div id="solicitud" class="section active">
-    <h2>Solicitar Cotización</h2>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
 
-    <div class="note">
-      Este formulario envía la solicitud a Hamyrich, Mildred, Erlys y Jorge.
-    </div>
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyP01cBzS2m6uY-v_cK7Fz2FT78RUj6BOiu7vAiBY6SJoAH7rRhKL-WV9NUpvzZR_fG/exec";
 
-    <div class="grid">
-      <div>
-        <label>Solicitante interno</label>
-        <input id="solicitante" placeholder="Ej. Jorge Villalobos">
-      </div>
+    function mostrarSeccion(id, btn) {
+      document.querySelectorAll(".section").forEach(function(section) {
+        section.classList.remove("active");
+      });
 
-      <div>
-        <label>Cliente</label>
-        <input id="cliente" placeholder="Nombre del cliente">
-      </div>
+      document.querySelectorAll(".tabs button").forEach(function(button) {
+        button.classList.remove("active");
+      });
 
-      <div>
-        <label>Teléfono</label>
-        <input id="telefono" placeholder="Teléfono / WhatsApp">
-      </div>
-
-      <div>
-        <label>Correo del cliente</label>
-        <input id="correoCliente" type="email" placeholder="cliente@email.com">
-      </div>
-
-      <div>
-        <label>Tipo de ecommerce</label>
-        <select id="tipoEcommerce">
-          <option>Básico - Tienda pequeña</option>
-          <option>Intermedio - Tienda profesional</option>
-          <option>Avanzado - Ecommerce personalizado</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Cantidad de productos</label>
-        <select id="productos">
-          <option>1 a 20 productos</option>
-          <option>21 a 50 productos</option>
-          <option>51 a 100 productos</option>
-          <option>Más de 100 productos</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Diseño</label>
-        <select id="diseno">
-          <option>Plantilla base</option>
-          <option>Diseño semi personalizado</option>
-          <option>Diseño 100% personalizado</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Integraciones</label>
-        <select id="integraciones">
-          <option>Sin integraciones</option>
-          <option>WhatsApp / Redes Sociales</option>
-          <option>CRM / Email Marketing</option>
-          <option>Inventario / ERP / API</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Urgencia</label>
-        <select id="urgencia">
-          <option>Normal</option>
-          <option>Urgente</option>
-          <option>Prioridad alta</option>
-        </select>
-      </div>
-
-      <div class="full">
-        <label>Comentarios del proyecto</label>
-        <textarea id="comentarios" placeholder="Describe el proyecto, funcionalidades, referencias, necesidades del cliente, etc."></textarea>
-      </div>
-    </div>
-
-    <button class="btn" onclick="enviarSolicitud()">Enviar Solicitud</button>
-    <div id="mensajeSolicitud"></div>
-  </div>
-
-  <div id="respuesta" class="section">
-    <h2>Responder Solicitud</h2>
-
-    <div class="note">
-      Esta respuesta se envía al cliente con copia a Mildred, Erlys y Jorge. Si el cliente responde, la respuesta irá dirigida a Hamyrich.
-    </div>
-
-    <div class="grid">
-      <div>
-        <label>Cliente</label>
-        <input id="respCliente" placeholder="Nombre del cliente">
-      </div>
-
-      <div>
-        <label>Correo del cliente</label>
-        <input id="respCorreoCliente" type="email" placeholder="cliente@email.com">
-      </div>
-
-      <div>
-        <label>Precio final USD</label>
-        <input id="precioFinal" type="number" placeholder="Ej. 2500">
-      </div>
-
-      <div>
-        <label>Tiempo estimado</label>
-        <input id="tiempoEstimado" placeholder="Ej. 20 días hábiles">
-      </div>
-
-      <div class="full">
-        <label>Respuesta / propuesta</label>
-        <textarea id="respuestaTexto" placeholder="Escribe aquí la respuesta que recibirá el cliente"></textarea>
-      </div>
-
-      <div class="full">
-        <label>Observaciones adicionales</label>
-        <textarea id="observaciones" placeholder="Notas adicionales"></textarea>
-      </div>
-    </div>
-
-    <button class="btn" onclick="enviarRespuesta()">Enviar Respuesta al Cliente</button>
-    <div id="mensajeRespuesta"></div>
-  </div>
-</div>
-
-<script>
-  const SCRIPT_URL = "https://script.google.com/a/macros/eliteonlinemedia.com/s/AKfycbyP01cBzS2m6uY-v_cK7Fz2FT78RUj6BOiu7vAiBY6SJoAH7rRhKL-WV9NUpvzZR_fG/exec";
-
-  function mostrarSeccion(id, btn) {
-    document.querySelectorAll(".section").forEach(function(section) {
-      section.classList.remove("active");
-    });
-
-    document.querySelectorAll(".tabs button").forEach(function(button) {
-      button.classList.remove("active");
-    });
-
-    document.getElementById(id).classList.add("active");
-    btn.classList.add("active");
-  }
-
-  function enviarPayload(data, mensajeId) {
-    document.getElementById(mensajeId).innerHTML = "<div>Enviando...</div>";
-
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: "payload=" + encodeURIComponent(JSON.stringify(data))
-    });
-
-    document.getElementById(mensajeId).innerHTML =
-      '<div class="success">Enviado correctamente.</div>';
-  }
-
-  function enviarSolicitud() {
-    const cliente = document.getElementById("cliente").value.trim();
-    const correoCliente = document.getElementById("correoCliente").value.trim();
-
-    if (!cliente || !correoCliente) {
-      document.getElementById("mensajeSolicitud").innerHTML =
-        '<div class="error">Completa cliente y correo del cliente.</div>';
-      return;
+      document.getElementById(id).classList.add("active");
+      btn.classList.add("active");
     }
 
-    const data = {
-      tipoFormulario: "solicitud",
-      solicitante: document.getElementById("solicitante").value.trim(),
-      cliente: cliente,
-      telefono: document.getElementById("telefono").value.trim(),
-      correoCliente: correoCliente,
-      tipoEcommerce: document.getElementById("tipoEcommerce").value,
-      productos: document.getElementById("productos").value,
-      diseno: document.getElementById("diseno").value,
-      integraciones: document.getElementById("integraciones").value,
-      urgencia: document.getElementById("urgencia").value,
-      comentarios: document.getElementById("comentarios").value.trim()
-    };
-
-    enviarPayload(data, "mensajeSolicitud");
-  }
-
-  function enviarRespuesta() {
-    const cliente = document.getElementById("respCliente").value.trim();
-    const correoCliente = document.getElementById("respCorreoCliente").value.trim();
-    const respuesta = document.getElementById("respuestaTexto").value.trim();
-
-    if (!cliente || !correoCliente || !respuesta) {
-      document.getElementById("mensajeRespuesta").innerHTML =
-        '<div class="error">Completa cliente, correo del cliente y respuesta.</div>';
-      return;
+    function validarEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    const data = {
-      tipoFormulario: "respuesta",
-      cliente: cliente,
-      correoCliente: correoCliente,
-      precioFinal: document.getElementById("precioFinal").value.trim(),
-      tiempoEstimado: document.getElementById("tiempoEstimado").value.trim(),
-      respuesta: respuesta,
-      observaciones: document.getElementById("observaciones").value.trim()
-    };
+    function enviarPayload(data, mensajeId, botonId) {
+      const mensaje = document.getElementById(mensajeId);
+      const boton = document.getElementById(botonId);
 
-    enviarPayload(data, "mensajeRespuesta");
-  }
-</script>
+      mensaje.innerHTML = '<div class="info">Enviando...</div>';
+      boton.disabled = true;
 
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = SCRIPT_URL;
+      form.target = "hidden_iframe";
+      form.style.display = "none";
+
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "payload";
+      input.value = JSON.stringify(data);
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(function() {
+        mensaje.innerHTML = '<div class="success">Enviado correctamente. Revisa el correo.</div>';
+        boton.disabled = false;
+        document.body.removeChild(form);
+      }, 1200);
+    }
+
+    function enviarSolicitud() {
+      const solicitante = document.getElementById("solicitante").value.trim();
+      const cliente = document.getElementById("cliente").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const correoCliente = document.getElementById("correoCliente").value.trim();
+      const comentarios = document.getElementById("comentarios").value.trim();
+
+      if (!solicitante || !cliente || !correoCliente) {
+        document.getElementById("mensajeSolicitud").innerHTML = '<div class="error">Completa solicitante, cliente y correo del cliente.</div>';
+        return;
+      }
+
+      if (!validarEmail(correoCliente)) {
+        document.getElementById("mensajeSolicitud").innerHTML = '<div class="error">El correo del cliente no tiene un formato válido.</div>';
+        return;
+      }
+
+      const data = {
+        tipoFormulario: "solicitud",
+        solicitante: solicitante,
+        cliente: cliente,
+        telefono: telefono,
+        correoCliente: correoCliente,
+        tipoEcommerce: document.getElementById("tipoEcommerce").value,
+        productos: document.getElementById("productos").value,
+        diseno: document.getElementById("diseno").value,
+        integraciones: document.getElementById("integraciones").value,
+        urgencia: document.getElementById("urgencia").value,
+        comentarios: comentarios
+      };
+
+      enviarPayload(data, "mensajeSolicitud", "btnSolicitud");
+    }
+
+    function enviarRespuesta() {
+      const cliente = document.getElementById("respCliente").value.trim();
+      const correoCliente = document.getElementById("respCorreoCliente").value.trim();
+      const precioFinal = document.getElementById("precioFinal").value.trim();
+      const tiempoEstimado = document.getElementById("tiempoEstimado").value.trim();
+      const respuesta = document.getElementById("respuestaTexto").value.trim();
+      const observaciones = document.getElementById("observaciones").value.trim();
+
+      if (!cliente || !correoCliente || !respuesta) {
+        document.getElementById("mensajeRespuesta").innerHTML = '<div class="error">Completa cliente, correo del cliente y respuesta.</div>';
+        return;
+      }
+
+      if (!validarEmail(correoCliente)) {
+        document.getElementById("mensajeRespuesta").innerHTML = '<div class="error">El correo del cliente no tiene un formato válido.</div>';
+        return;
+      }
+
+      const data = {
+        tipoFormulario: "respuesta",
+        cliente: cliente,
+        correoCliente: correoCliente,
+        precioFinal: precioFinal,
+        tiempoEstimado: tiempoEstimado,
+        respuesta: respuesta,
+        observaciones: observaciones
+      };
+
+      enviarPayload(data, "mensajeRespuesta", "btnRespuesta");
+    }
+  </script>
 </body>
 </html>
-        
+
+ 
+ 
+
+   
