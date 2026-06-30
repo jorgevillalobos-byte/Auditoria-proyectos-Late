@@ -2,598 +2,352 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reporte de Auditoría</title>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+  <title>Sistema de Cotizaciones Ecommerce</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f3f6f9;
+      background: #f4f6f9;
       margin: 0;
-      color: #001f3f;
+      padding: 25px;
+      color: #1f2937;
     }
 
     .container {
-      max-width: 1140px;
+      max-width: 1100px;
       margin: auto;
       background: white;
-      padding: 20px;
-      min-height: 100vh;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
     }
 
-    h1, h2, h3 {
-      color: #001f3f;
+    h1, h2 {
+      text-align: center;
+      color: #0f172a;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #e5e7eb;
+    }
+
+    .tabs button.active {
+      background: #0f172a;
+      color: white;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
     }
 
     label {
       font-weight: bold;
       display: block;
-      margin-top: 12px;
+      margin-bottom: 5px;
+      margin-top: 10px;
     }
 
-    input, textarea, select {
+    input, select, textarea {
       width: 100%;
-      padding: 9px;
-      margin-top: 5px;
-      border: 1px solid #ccd6e0;
-      border-radius: 5px;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
       box-sizing: border-box;
     }
 
     textarea {
-      min-height: 70px;
+      min-height: 110px;
     }
 
-    button {
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .btn {
+      margin-top: 20px;
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      padding: 14px;
       border: none;
-      padding: 10px 16px;
-      border-radius: 5px;
+      border-radius: 10px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 15px;
     }
 
-    .btn-save {
-      background: #00a65a;
-      color: white;
+    .btn:hover {
+      background: #1d4ed8;
     }
 
-    .btn-pdf {
-      background: #2f5f98;
-      color: white;
-    }
-
-    .btn-clear {
-      background: #435a78;
-      color: white;
-    }
-
-    .btn-delete {
-      background: #d9534f;
-      color: white;
-    }
-
-    .btn-add {
-      background: #001f3f;
-      color: white;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .search-box {
-      display: flex;
-      gap: 12px;
-      align-items: end;
-      margin-bottom: 20px;
-    }
-
-    .search-box div {
-      flex: 1;
-    }
-
-    .audit-card {
-      background: #fff;
-      border: 1px solid #dce3ea;
+    .note {
+      background: #f8fafc;
+      border-left: 5px solid #2563eb;
+      padding: 15px;
       border-radius: 8px;
-      padding: 14px;
       margin-bottom: 20px;
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin: 15px 0;
-    }
-
-    .summary-box {
-      background: #eef4f8;
-      border: 1px solid #d5e1ea;
-      border-radius: 7px;
-      padding: 10px;
-    }
-
-    .summary-box small {
-      display: block;
-      color: #2f5f98;
+    .success {
+      color: #16a34a;
       font-weight: bold;
-    }
-
-    .summary-box strong {
-      font-size: 20px;
-    }
-
-    .project-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
+      text-align: center;
       margin-top: 15px;
     }
 
-    .project-table th,
-    .project-table td {
-      border: 1px solid #dce3ea;
-      padding: 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    .project-table th {
-      background: #f4f7fa;
-    }
-
-    .row-risk {
-      background: #fff9dc;
-    }
-
-    .row-attention {
-      background: #fdece8;
-    }
-
-    .project-link {
-      color: #0645ad;
+    .error {
+      color: #dc2626;
       font-weight: bold;
-      text-decoration: underline;
-    }
-
-    .status-risk {
-      background: #fff2cc;
-      color: #a66a00;
-      padding: 6px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      display: inline-block;
-    }
-
-    .status-attention {
-      background: #ffd9d2;
-      color: red;
-      padding: 6px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      display: inline-block;
-    }
-
-    .status-good {
-      background: #dff0d8;
-      color: #2d7a2d;
-      padding: 6px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      display: inline-block;
-    }
-
-    @media print {
-      button,
-      .form-section,
-      .search-box {
-        display: none !important;
-      }
+      text-align: center;
+      margin-top: 15px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Reporte de Auditoría</h1>
 
-    <div class="form-section">
-      <h2>Crear Auditoría</h2>
+<div class="container">
+  <h1>Sistema de Cotizaciones Ecommerce</h1>
 
-      <div class="form-grid">
-        <div>
-          <label>Fecha de Auditoría</label>
-          <input type="date" id="fechaAuditoria">
-        </div>
-
-        <div>
-          <label>Auditor</label>
-          <input type="text" id="auditor" value="Jorge VILLALOBOS">
-        </div>
-
-        <div>
-          <label>Team Responsable</label>
-          <input type="text" id="team" placeholder="Customer Services">
-        </div>
-      </div>
-
-      <h3>Agregar Proyecto</h3>
-
-      <div class="form-grid">
-        <div>
-          <label>Project URL</label>
-          <input type="url" id="projectUrl" placeholder="https://...">
-        </div>
-
-        <div>
-          <label>Categoría</label>
-          <input type="text" id="categoria" placeholder="Recuperación GBP">
-        </div>
-
-        <div>
-          <label>Días Late</label>
-          <input type="number" id="diasLate" placeholder="50">
-        </div>
-      </div>
-
-      <div class="form-grid">
-        <div>
-          <label>Health</label>
-          <select id="health">
-            <option value="Good">Good</option>
-            <option value="At Risk">At Risk</option>
-            <option value="Needs Attention">Needs Attention</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Bloqueo</label>
-          <input type="text" id="bloqueo" placeholder="Opcional">
-        </div>
-
-        <div>
-          <label>Acción Requerida</label>
-          <input type="text" id="accion" placeholder="Opcional">
-        </div>
-      </div>
-
-      <label>Última nota</label>
-      <textarea id="ultimaNota" placeholder="Escribe la última nota del proyecto..."></textarea>
-
-      <button class="btn-add" type="button" onclick="agregarProyecto()">Agregar Proyecto</button>
-
-      <h3>Proyectos agregados</h3>
-      <div id="previewProyectos"></div>
-
-      <button class="btn-save" type="button" onclick="guardarAuditoria()">Guardar Auditoría</button>
-    </div>
-
-    <hr>
-
-    <h2>Historial de Auditorías</h2>
-
-    <div class="search-box">
-      <div>
-        <label>Buscar auditoría por fecha</label>
-        <input type="date" id="buscarFecha" onchange="renderizarHistorial()">
-      </div>
-
-      <button class="btn-clear" type="button" onclick="limpiarBusqueda()">Limpiar búsqueda</button>
-      <button class="btn-pdf" type="button" onclick="guardarPDF()">Guardar Auditoría en PDF</button>
-      <button class="btn-delete" type="button" onclick="borrarTodo()">Borrar historial</button>
-    </div>
-
-    <div id="historialAuditorias"></div>
+  <div class="tabs">
+    <button class="active" onclick="mostrarSeccion('solicitud', this)">Solicitar Cotización</button>
+    <button onclick="mostrarSeccion('respuesta', this)">Responder Solicitud</button>
   </div>
 
-  <script>
-    let proyectosTemporales = [];
+  <div id="solicitud" class="section active">
+    <h2>Solicitar Cotización</h2>
 
-    document.getElementById("fechaAuditoria").valueAsDate = new Date();
+    <div class="note">
+      Este formulario envía la solicitud a Hamyrich, Mildred, Erlys y Jorge.
+    </div>
 
-    function agregarProyecto() {
-      const url = document.getElementById("projectUrl").value.trim();
-      const team = document.getElementById("team").value.trim();
-      const categoria = document.getElementById("categoria").value.trim();
-      const diasLate = document.getElementById("diasLate").value;
-      const health = document.getElementById("health").value;
-      const ultimaNota = document.getElementById("ultimaNota").value.trim();
-      const bloqueo = document.getElementById("bloqueo").value.trim();
-      const accion = document.getElementById("accion").value.trim();
+    <div class="grid">
+      <div>
+        <label>Solicitante interno</label>
+        <input id="solicitante" placeholder="Ej. Jorge Villalobos">
+      </div>
 
-      if (!url || !team || !categoria || !diasLate || !ultimaNota) {
-        alert("Completa Project URL, Team, Categoría, Días Late y Última nota.");
-        return;
-      }
+      <div>
+        <label>Cliente</label>
+        <input id="cliente" placeholder="Nombre del cliente">
+      </div>
 
-      proyectosTemporales.push({
-        url,
-        team,
-        categoria,
-        diasLate: Number(diasLate),
-        health,
-        ultimaNota,
-        bloqueo,
-        accion
-      });
+      <div>
+        <label>Teléfono</label>
+        <input id="telefono" placeholder="Teléfono / WhatsApp">
+      </div>
 
-      limpiarFormularioProyecto();
-      renderizarPreview();
+      <div>
+        <label>Correo del cliente</label>
+        <input id="correoCliente" type="email" placeholder="cliente@email.com">
+      </div>
+
+      <div>
+        <label>Tipo de ecommerce</label>
+        <select id="tipoEcommerce">
+          <option>Básico - Tienda pequeña</option>
+          <option>Intermedio - Tienda profesional</option>
+          <option>Avanzado - Ecommerce personalizado</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Cantidad de productos</label>
+        <select id="productos">
+          <option>1 a 20 productos</option>
+          <option>21 a 50 productos</option>
+          <option>51 a 100 productos</option>
+          <option>Más de 100 productos</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Diseño</label>
+        <select id="diseno">
+          <option>Plantilla base</option>
+          <option>Diseño semi personalizado</option>
+          <option>Diseño 100% personalizado</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Integraciones</label>
+        <select id="integraciones">
+          <option>Sin integraciones</option>
+          <option>WhatsApp / Redes Sociales</option>
+          <option>CRM / Email Marketing</option>
+          <option>Inventario / ERP / API</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Urgencia</label>
+        <select id="urgencia">
+          <option>Normal</option>
+          <option>Urgente</option>
+          <option>Prioridad alta</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>Comentarios del proyecto</label>
+        <textarea id="comentarios" placeholder="Describe el proyecto, funcionalidades, referencias, necesidades del cliente, etc."></textarea>
+      </div>
+    </div>
+
+    <button class="btn" onclick="enviarSolicitud()">Enviar Solicitud</button>
+    <div id="mensajeSolicitud"></div>
+  </div>
+
+  <div id="respuesta" class="section">
+    <h2>Responder Solicitud</h2>
+
+    <div class="note">
+      Esta respuesta se envía al cliente con copia a Mildred, Erlys y Jorge. Si el cliente responde, la respuesta irá dirigida a Hamyrich.
+    </div>
+
+    <div class="grid">
+      <div>
+        <label>Cliente</label>
+        <input id="respCliente" placeholder="Nombre del cliente">
+      </div>
+
+      <div>
+        <label>Correo del cliente</label>
+        <input id="respCorreoCliente" type="email" placeholder="cliente@email.com">
+      </div>
+
+      <div>
+        <label>Precio final USD</label>
+        <input id="precioFinal" type="number" placeholder="Ej. 2500">
+      </div>
+
+      <div>
+        <label>Tiempo estimado</label>
+        <input id="tiempoEstimado" placeholder="Ej. 20 días hábiles">
+      </div>
+
+      <div class="full">
+        <label>Respuesta / propuesta</label>
+        <textarea id="respuestaTexto" placeholder="Escribe aquí la respuesta que recibirá el cliente"></textarea>
+      </div>
+
+      <div class="full">
+        <label>Observaciones adicionales</label>
+        <textarea id="observaciones" placeholder="Notas adicionales"></textarea>
+      </div>
+    </div>
+
+    <button class="btn" onclick="enviarRespuesta()">Enviar Respuesta al Cliente</button>
+    <div id="mensajeRespuesta"></div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/a/macros/eliteonlinemedia.com/s/AKfycbyP01cBzS2m6uY-v_cK7Fz2FT78RUj6BOiu7vAiBY6SJoAH7rRhKL-WV9NUpvzZR_fG/exec";
+
+  function mostrarSeccion(id, btn) {
+    document.querySelectorAll(".section").forEach(function(section) {
+      section.classList.remove("active");
+    });
+
+    document.querySelectorAll(".tabs button").forEach(function(button) {
+      button.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+    btn.classList.add("active");
+  }
+
+  function enviarPayload(data, mensajeId) {
+    document.getElementById(mensajeId).innerHTML = "<div>Enviando...</div>";
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "payload=" + encodeURIComponent(JSON.stringify(data))
+    });
+
+    document.getElementById(mensajeId).innerHTML =
+      '<div class="success">Enviado correctamente.</div>';
+  }
+
+  function enviarSolicitud() {
+    const cliente = document.getElementById("cliente").value.trim();
+    const correoCliente = document.getElementById("correoCliente").value.trim();
+
+    if (!cliente || !correoCliente) {
+      document.getElementById("mensajeSolicitud").innerHTML =
+        '<div class="error">Completa cliente y correo del cliente.</div>';
+      return;
     }
 
-    function limpiarFormularioProyecto() {
-      document.getElementById("projectUrl").value = "";
-      document.getElementById("categoria").value = "";
-      document.getElementById("diasLate").value = "";
-      document.getElementById("health").value = "Good";
-      document.getElementById("ultimaNota").value = "";
-      document.getElementById("bloqueo").value = "";
-      document.getElementById("accion").value = "";
+    const data = {
+      tipoFormulario: "solicitud",
+      solicitante: document.getElementById("solicitante").value.trim(),
+      cliente: cliente,
+      telefono: document.getElementById("telefono").value.trim(),
+      correoCliente: correoCliente,
+      tipoEcommerce: document.getElementById("tipoEcommerce").value,
+      productos: document.getElementById("productos").value,
+      diseno: document.getElementById("diseno").value,
+      integraciones: document.getElementById("integraciones").value,
+      urgencia: document.getElementById("urgencia").value,
+      comentarios: document.getElementById("comentarios").value.trim()
+    };
+
+    enviarPayload(data, "mensajeSolicitud");
+  }
+
+  function enviarRespuesta() {
+    const cliente = document.getElementById("respCliente").value.trim();
+    const correoCliente = document.getElementById("respCorreoCliente").value.trim();
+    const respuesta = document.getElementById("respuestaTexto").value.trim();
+
+    if (!cliente || !correoCliente || !respuesta) {
+      document.getElementById("mensajeRespuesta").innerHTML =
+        '<div class="error">Completa cliente, correo del cliente y respuesta.</div>';
+      return;
     }
 
-    function renderizarPreview() {
-      const contenedor = document.getElementById("previewProyectos");
+    const data = {
+      tipoFormulario: "respuesta",
+      cliente: cliente,
+      correoCliente: correoCliente,
+      precioFinal: document.getElementById("precioFinal").value.trim(),
+      tiempoEstimado: document.getElementById("tiempoEstimado").value.trim(),
+      respuesta: respuesta,
+      observaciones: document.getElementById("observaciones").value.trim()
+    };
 
-      if (proyectosTemporales.length === 0) {
-        contenedor.innerHTML = "<p>No hay proyectos agregados.</p>";
-        return;
-      }
+    enviarPayload(data, "mensajeRespuesta");
+  }
+</script>
 
-      contenedor.innerHTML = `
-        <table class="project-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Project URL</th>
-              <th>Team Responsable</th>
-              <th>Categoría</th>
-              <th>Días Late</th>
-              <th>Health</th>
-              <th>Última nota</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${proyectosTemporales.map((p, index) => `
-              <tr>
-                <td>${index + 1}</td>
-                <td><a class="project-link" href="${p.url}" target="_blank">Open project</a></td>
-                <td>${p.team}</td>
-                <td>${p.categoria}</td>
-                <td style="color:red;">${p.diasLate} días late</td>
-                <td>${badgeHealth(p.health)}</td>
-                <td>${p.ultimaNota}</td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      `;
-    }
-
-    function guardarAuditoria() {
-      const fecha = document.getElementById("fechaAuditoria").value;
-      const auditor = document.getElementById("auditor").value.trim();
-
-      if (!fecha || !auditor) {
-        alert("Completa la fecha y el auditor.");
-        return;
-      }
-
-      if (proyectosTemporales.length === 0) {
-        alert("Agrega al menos un proyecto.");
-        return;
-      }
-
-      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-
-      const auditoria = {
-        id: Date.now(),
-        fecha,
-        auditor,
-        total: proyectosTemporales.length,
-        good: proyectosTemporales.filter(p => p.health === "Good").length,
-        atRisk: proyectosTemporales.filter(p => p.health === "At Risk").length,
-        needsAttention: proyectosTemporales.filter(p => p.health === "Needs Attention").length,
-        late: proyectosTemporales.filter(p => p.diasLate > 0).length,
-        guardado: new Date().toLocaleString(),
-        bloqueos: proyectosTemporales.filter(p => p.bloqueo).map(p => p.bloqueo),
-        acciones: proyectosTemporales.filter(p => p.accion).map(p => p.accion),
-        proyectos: proyectosTemporales
-      };
-
-      auditorias.unshift(auditoria);
-      localStorage.setItem("auditorias", JSON.stringify(auditorias));
-
-      proyectosTemporales = [];
-      renderizarPreview();
-      renderizarHistorial();
-
-      alert("Auditoría guardada correctamente.");
-    }
-
-    function renderizarHistorial() {
-      const contenedor = document.getElementById("historialAuditorias");
-      const auditorias = JSON.parse(localStorage.getItem("auditorias")) || [];
-      const buscarFecha = document.getElementById("buscarFecha").value;
-
-      const filtradas = buscarFecha
-        ? auditorias.filter(a => a.fecha === buscarFecha)
-        : auditorias;
-
-      if (filtradas.length === 0) {
-        contenedor.innerHTML = "<p>No hay auditorías guardadas.</p>";
-        return;
-      }
-
-      contenedor.innerHTML = filtradas.map((auditoria, index) => `
-        <div class="audit-card">
-          <h3>
-            ▼ Auditoría ${index + 1} |
-            Fecha: ${auditoria.fecha} |
-            Auditor: ${auditoria.auditor} |
-            Total: ${auditoria.total} |
-            Guardado: ${auditoria.guardado}
-          </h3>
-
-          <div class="summary-grid">
-            <div class="summary-box">
-              <small>Total Projects</small>
-              <strong>${auditoria.total}</strong>
-            </div>
-            <div class="summary-box">
-              <small>Good</small>
-              <strong>${auditoria.good}</strong>
-            </div>
-            <div class="summary-box">
-              <small>At Risk</small>
-              <strong>${auditoria.atRisk}</strong>
-            </div>
-            <div class="summary-box">
-              <small>Needs Attention</small>
-              <strong>${auditoria.needsAttention}</strong>
-            </div>
-            <div class="summary-box">
-              <small>Late</small>
-              <strong>${auditoria.late}</strong>
-            </div>
-          </div>
-
-          <h3>Bloqueos Identificados</h3>
-          ${
-            auditoria.bloqueos && auditoria.bloqueos.length > 0
-              ? `<ul>${auditoria.bloqueos.map(b => `<li>${b}</li>`).join("")}</ul>`
-              : `<p>Sin bloqueos registrados.</p>`
-          }
-
-          <h3>Acciones Requeridas</h3>
-          ${
-            auditoria.acciones && auditoria.acciones.length > 0
-              ? `<ul>${auditoria.acciones.map(a => `<li>${a}</li>`).join("")}</ul>`
-              : `<p>Sin acciones registradas.</p>`
-          }
-
-          <h3>Proyectos auditados</h3>
-
-          <table class="project-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Project URL</th>
-                <th>Team Responsable</th>
-                <th>Categoría</th>
-                <th>Días Late</th>
-                <th>Health</th>
-                <th>Última nota</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${auditoria.proyectos.map((p, i) => `
-                <tr class="${p.health === "At Risk" ? "row-risk" : p.health === "Needs Attention" ? "row-attention" : ""}">
-                  <td>${i + 1}</td>
-                  <td>
-                    <a class="project-link" href="${p.url}" target="_blank">
-                      Open project
-                    </a>
-                  </td>
-                  <td>${p.team}</td>
-                  <td>${p.categoria}</td>
-                  <td style="color:red;">${p.diasLate} días late</td>
-                  <td>${badgeHealth(p.health)}</td>
-                  <td>${p.ultimaNota}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      `).join("");
-    }
-
-    function badgeHealth(health) {
-      if (health === "At Risk") {
-        return `<span class="status-risk">At Risk</span>`;
-      }
-
-      if (health === "Needs Attention") {
-        return `<span class="status-attention">Needs Attention</span>`;
-      }
-
-      return `<span class="status-good">Good</span>`;
-    }
-
-    function limpiarBusqueda() {
-      document.getElementById("buscarFecha").value = "";
-      renderizarHistorial();
-    }
-
-    function guardarPDF() {
-      const historialOriginal = document.getElementById("historialAuditorias");
-
-      if (!historialOriginal.innerHTML.trim() || historialOriginal.innerText.includes("No hay auditorías")) {
-        alert("No hay auditorías para exportar.");
-        return;
-      }
-
-      const copia = historialOriginal.cloneNode(true);
-
-      copia.style.background = "white";
-      copia.style.color = "black";
-      copia.style.width = "1200px";
-      copia.style.padding = "20px";
-      copia.style.position = "fixed";
-      copia.style.left = "0";
-      copia.style.top = "0";
-      copia.style.zIndex = "9999";
-      copia.style.display = "block";
-
-      document.body.appendChild(copia);
-
-      const opciones = {
-        margin: 0.25,
-        filename: "Auditoria_Guardada.pdf",
-        image: {
-          type: "jpeg",
-          quality: 1
-        },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: "#ffffff",
-          scrollX: 0,
-          scrollY: 0,
-          windowWidth: 1400
-        },
-        jsPDF: {
-          unit: "in",
-          format: "letter",
-          orientation: "landscape"
-        }
-      };
-
-      setTimeout(() => {
-        html2pdf()
-          .set(opciones)
-          .from(copia)
-          .save()
-          .then(() => {
-            document.body.removeChild(copia);
-          });
-      }, 500);
-    }
-
-    function borrarTodo() {
-      if (confirm("¿Seguro que deseas borrar todo el historial?")) {
-        localStorage.removeItem("auditorias");
-        renderizarHistorial();
-      }
-    }
-
-    renderizarPreview();
-    renderizarHistorial();
-  </script>
 </body>
 </html>
+        
